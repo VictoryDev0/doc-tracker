@@ -1,0 +1,348 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sample questionnaire</title>
+<style>
+  :root{--bg:#f7f9fc;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e8ecf3;
+    --brand:#2563eb;--brand2:#0ea5e9;--gold:#f59e0b;--green:#16a34a;
+    --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 120px}
+  header.hero{padding:38px 0 10px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px;margin-bottom:18px}
+  .brand .sq{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:12px;
+    background:linear-gradient(135deg,var(--brand),var(--brand2))}
+  .brand .by{font-size:10.5px;font-weight:700;color:var(--mut);border:1px solid var(--line);
+    border-radius:999px;padding:2px 8px;background:#fff}
+  h1{font-size:clamp(1.5rem,5vw,2.1rem);font-weight:900;letter-spacing:-.02em;line-height:1.15;margin:0 0 8px}
+  h1 i{font-style:normal;background:linear-gradient(90deg,var(--brand),var(--brand2));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--mut);font-size:15px;margin:0 0 6px}
+  .sub b{color:var(--ink)}
+
+  .progress{position:sticky;top:0;z-index:20;background:rgba(247,249,252,.92);backdrop-filter:blur(8px);
+    padding:10px 0 8px;margin:0 -18px;padding-left:18px;padding-right:18px;border-bottom:1px solid var(--line)}
+  .bar{height:8px;border-radius:99px;background:#e5eaf2;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .35s cubic-bezier(.22,1,.36,1);
+    background:linear-gradient(90deg,var(--brand),var(--brand2))}
+  .pline{display:flex;justify-content:space-between;font-size:11.5px;color:var(--mut);margin-top:5px;font-weight:600}
+  .pline .sv{color:var(--green);opacity:0;transition:opacity .3s}
+  .pline .sv.on{opacity:1}
+
+  .band{margin:34px 0 6px;display:flex;align-items:baseline;gap:10px}
+  .band .bl{font-size:12px;font-weight:800;color:#fff;background:var(--ink);border-radius:7px;padding:3px 9px;letter-spacing:.04em}
+  .band h2{font-size:18px;font-weight:800;margin:0;letter-spacing:-.01em}
+  .band .cnt{margin-left:auto;font-size:11px;color:var(--mut);font-weight:600;white-space:nowrap}
+  .bandhint{font-size:13px;color:var(--mut);margin:2px 0 14px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;margin-bottom:12px;
+    box-shadow:0 1px 2px rgba(15,23,42,.04),0 6px 18px rgba(15,23,42,.04);transition:border-color .2s}
+  .q.done{border-color:#bfdbfe}
+  .q .qt{font-weight:700;font-size:15px;display:flex;gap:8px;align-items:baseline}
+  .q .qid{font-size:10.5px;font-weight:800;color:var(--brand);background:#eff6ff;border-radius:5px;padding:1px 7px;flex:none;letter-spacing:.03em}
+  .q .qh{font-size:12.5px;color:var(--mut);margin:5px 0 12px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 15px;font-size:13.5px;
+    font-weight:600;cursor:pointer;font-family:var(--font);color:var(--ink);transition:all .12s;text-align:left}
+  .pill:hover{border-color:#94a3b8}
+  .pill.on{border-color:var(--brand);background:var(--brand);color:#fff}
+  input[type=text],input[type=number],textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;
+    padding:11px 13px;font-family:var(--font);font-size:14.5px;color:var(--ink);background:#fff;margin-top:9px}
+  input:focus,textarea:focus{outline:2px solid rgba(37,99,235,.3);border-color:var(--brand)}
+  textarea{resize:vertical;min-height:64px}
+  .mix{display:grid;grid-template-columns:1fr 92px;gap:7px 10px;align-items:center;margin-top:8px}
+  .mix label{font-size:13.5px;font-weight:600}
+  .mix input{margin:0;text-align:right;padding:8px 10px}
+  .mixsum{font-size:12px;color:var(--mut);margin-top:7px;font-weight:600}
+  .mixsum.bad{color:#dc2626}
+  .other-in{display:none}.other-in.show{display:block}
+
+  .submitcard{background:linear-gradient(160deg,#0b1220,#13233f);color:#fff;border-radius:20px;
+    padding:26px;margin-top:36px;text-align:center}
+  .submitcard h2{margin:0 0 6px;font-size:20px;font-weight:800}
+  .submitcard p{color:#9fb0c8;font-size:13.5px;margin:0 0 18px}
+  .go{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;border-radius:999px;
+    background:var(--gold);color:#251a00;font-family:var(--font);font-weight:800;font-size:15.5px;padding:15px 30px;transition:all .15s}
+  .go:hover{background:#d97706;transform:translateY(-1px)}
+  .go:disabled{opacity:.55;cursor:wait;transform:none}
+  .submitcard .mini{font-size:11px;color:#5d7396;margin-top:12px}
+
+  .donecard{display:none;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:20px;padding:34px;text-align:center;margin-top:36px}
+  .donecard.show{display:block}
+  .donecard .ic{font-size:34px}
+  .donecard h2{margin:8px 0 6px;font-size:20px;font-weight:800;color:#14532d}
+  .donecard p{color:#166534;font-size:14px;margin:0}
+
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);z-index:50;
+    background:var(--ink);color:#fff;border-radius:999px;padding:10px 20px;font-size:13px;font-weight:600;
+    transition:transform .3s;box-shadow:0 12px 30px rgba(15,23,42,.35)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .lockscreen{max-width:420px;margin:18vh auto;text-align:center;padding:0 20px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><body>
+
+<div id="app" class="wrap" style="display:none">
+  <header class="hero">
+    <div class="brand"><span class="sq">◆</span> DOC TRACKER <span class="by">sample form</span></div>
+    <h1>Team tooling survey: <i>a demo questionnaire</i></h1>
+    <p class="sub">Answers save <b>automatically</b> (closing the tab is fine). Every question has a "don't know / later" option. <b>Submit</b> once at the end.</p>
+  </header>
+
+  <div class="progress"><div class="bar"><i id="pbar"></i></div>
+    <div class="pline"><span id="pcount">0 / 0 answered</span><span class="sv" id="psave">✓ saved</span></div>
+  </div>
+
+  <div id="qhost"></div>
+
+  <div class="submitcard" id="submitcard">
+    <h2>Done, or done enough?</h2>
+    <p>You do not have to answer everything. Unanswered questions are simply left blank.</p>
+    <button class="go" id="btn-submit">Submit answers →</button>
+    <div class="mini">The owner gets a push notification. You can come back, change answers and submit again.</div>
+  </div>
+
+  <div class="donecard" id="donecard">
+    <div class="ic">🎉</div><h2>Received, thank you!</h2>
+    <p>Your answers are stored.<br>You can come back at any time, change answers and submit again.</p>
+  </div>
+</div>
+
+<div class="lockscreen" id="lock" style="display:none">
+  <div style="font-size:34px">🔒</div>
+  <h1 style="font-size:1.3rem">Access required</h1>
+  <p class="sub">This questionnaire is private. Open it through the link that contains the access key.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var K = new URLSearchParams(location.search).get("k") || "";
+if (!K) { document.getElementById("lock").style.display = "block"; return; }
+document.getElementById("app").style.display = "block";
+
+/* ---------------- question bank ----------------
+   Bands start with {b, bt, bh}; questions have {id, t, h?, type, o?, other?}.
+   Types: single (pills, one choice), multi (pills, many), text, textarea,
+   mix (percent split across options). The first character of the id is the band. */
+var DK = "don't know / later";
+var Q = [
+ {b:"A", bt:"About you", bh:"A few basics so the answers can be put into context."},
+ {id:"A1", t:"What is your role?", type:"single", o:["Engineering","Product","Design","Operations","Sales / Support"], other:true},
+ {id:"A2", t:"How large is your team?", type:"single", o:["1 to 3","4 to 10","11 to 30","More than 30",DK]},
+ {id:"A3", t:"Which time zone do you mostly work in?", type:"text"},
+
+ {b:"B", bt:"Current tools", bh:"What you use today and how it feels."},
+ {id:"B1", t:"Which tools do you use every week?", h:"Pick all that apply.", type:"multi", o:["Issue tracker","Chat","Wiki / docs","Spreadsheets","Whiteboard","Video calls"], other:true},
+ {id:"B2", t:"How satisfied are you with the current setup?", type:"single", o:["Very satisfied","Mostly fine","Mixed","Frustrated",DK]},
+ {id:"B3", t:"Roughly how is your working time split?", h:"Should add up to about 100 %. A gut feeling is enough.", type:"mix", o:["Focused work","Meetings","Reviews","Support / interruptions","Other"]},
+
+ {b:"C", bt:"Pain points", bh:"Where time gets lost."},
+ {id:"C1", t:"What is the single biggest time sink in a normal week?", type:"textarea"},
+ {id:"C2", t:"How often do you search for information you know exists somewhere?", type:"single", o:["Several times a day","Daily","Weekly","Rarely",DK]},
+ {id:"C3", t:"Which of these would help most?", type:"multi", o:["Better search","Fewer meetings","Clearer ownership","Templates","Automation of repetitive steps",DK]},
+
+ {b:"D", bt:"Wrap-up", bh:"Anything else?"},
+ {id:"D1", t:"Would you join a 30 minute follow-up call?", type:"single", o:["Yes","Maybe later","No"]},
+ {id:"D2", t:"Anything missing from this questionnaire? Free thoughts:", type:"textarea"}
+];
+
+/* ---------------- state ---------------- */
+var LS = "sample_form_v1_" + K;
+var A = {};
+try { A = JSON.parse(localStorage.getItem(LS) || "{}"); } catch(e) { A = {}; }
+var dirty = false, submitting = false;
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function save(){ try { localStorage.setItem(LS, JSON.stringify(A)); } catch(e){} dirty = true; paint(); }
+function answered(id){
+  var v = A[id];
+  if (v == null) return false;
+  if (typeof v === "string") return v.trim() !== "";
+  if (Array.isArray(v)) return v.length > 0;
+  if (typeof v === "object") return Object.values(v).some(function(x){ return String(x||"").trim() !== ""; });
+  return true;
+}
+
+/* ---------------- render ---------------- */
+var host = document.getElementById("qhost");
+var qids = [];
+Q.forEach(function(item){
+  if (item.b) {
+    var band = document.createElement("div");
+    band.innerHTML = '<div class="band"><span class="bl">Part ' + esc(item.b) + '</span><h2>' + esc(item.bt) +
+      '</h2><span class="cnt" data-band="' + esc(item.b) + '"></span></div><div class="bandhint">' + esc(item.bh) + '</div>';
+    host.appendChild(band);
+    return;
+  }
+  qids.push(item.id);
+  var d = document.createElement("div");
+  d.className = "q"; d.id = "q-" + item.id; d.dataset.band = item.id[0];
+  var inner = '<div class="qt"><span class="qid">' + esc(item.id) + '</span><span>' + esc(item.t) + '</span></div>';
+  if (item.h) inner += '<div class="qh">' + esc(item.h) + '</div>';
+  if (item.type === "single" || item.type === "multi") {
+    inner += '<div class="opts">' + item.o.map(function(o){
+      return '<button class="pill" data-q="' + item.id + '" data-v="' + esc(o) + '">' + esc(o) + '</button>';
+    }).join("") + (item.other ? '<button class="pill" data-q="' + item.id + '" data-other="1">other …</button>' : "") + '</div>';
+    if (item.other) inner += '<input type="text" class="other-in" id="other-' + item.id + '" placeholder="Your answer …">';
+  } else if (item.type === "text") {
+    inner += '<input type="text" id="in-' + item.id + '" placeholder="Answer …">';
+  } else if (item.type === "textarea") {
+    inner += '<textarea id="in-' + item.id + '" placeholder="Answer … (keywords are fine)"></textarea>';
+  } else if (item.type === "mix") {
+    inner += '<div class="mix">' + item.o.map(function(o){
+      return '<label>' + esc(o) + '</label><input type="number" min="0" max="100" step="5" data-mix="' + item.id + '" data-k="' + esc(o) + '" placeholder="%">';
+    }).join("") + '</div><div class="mixsum" id="mixsum-' + item.id + '"></div>';
+  }
+  d.innerHTML = inner;
+  host.appendChild(d);
+});
+function itemOf(id){ return Q.find(function(x){ return x.id === id; }); }
+
+/* wire inputs */
+document.querySelectorAll(".pill").forEach(function(p){
+  p.addEventListener("click", function(){
+    var id = p.dataset.q, item = itemOf(id);
+    if (p.dataset.other) {
+      var inp = document.getElementById("other-" + id);
+      inp.classList.add("show"); inp.focus();
+      if (item.type === "single") {
+        p.parentElement.querySelectorAll(".pill").forEach(function(x){ x.classList.remove("on"); });
+        p.classList.add("on"); A[id] = "other: " + inp.value; save();
+      }
+      return;
+    }
+    if (item.type === "single") {
+      p.parentElement.querySelectorAll(".pill").forEach(function(x){ x.classList.remove("on"); });
+      var oi = document.getElementById("other-" + id); if (oi) oi.classList.remove("show");
+      p.classList.add("on"); A[id] = p.dataset.v; save();
+    } else {
+      var cur = Array.isArray(A[id]) ? A[id] : [];
+      var i = cur.indexOf(p.dataset.v);
+      if (i >= 0) { cur.splice(i, 1); p.classList.remove("on"); }
+      else { cur.push(p.dataset.v); p.classList.add("on"); }
+      A[id] = cur; save();
+    }
+  });
+});
+document.querySelectorAll(".other-in").forEach(function(inp){
+  inp.addEventListener("input", function(){
+    var id = inp.id.replace("other-", ""), item = itemOf(id);
+    if (item.type === "single") { A[id] = "other: " + inp.value; }
+    else {
+      var cur = (Array.isArray(A[id]) ? A[id] : []).filter(function(x){ return x.indexOf("other: ") !== 0; });
+      if (inp.value.trim()) cur.push("other: " + inp.value);
+      A[id] = cur;
+    }
+    save();
+  });
+});
+document.querySelectorAll("input[id^=in-],textarea[id^=in-]").forEach(function(inp){
+  inp.addEventListener("input", function(){ A[inp.id.replace("in-", "")] = inp.value; save(); });
+});
+function mixSum(id){
+  var sum = 0;
+  document.querySelectorAll('input[data-mix="' + id + '"]').forEach(function(x){ sum += (+x.value || 0); });
+  var el = document.getElementById("mixsum-" + id), off = sum && Math.abs(sum - 100) > 10;
+  el.textContent = "Total: " + sum + " %" + (off ? " (roughly 100 % would be good)" : "");
+  el.className = "mixsum" + (off ? " bad" : "");
+}
+document.querySelectorAll("input[data-mix]").forEach(function(inp){
+  inp.addEventListener("input", function(){
+    var id = inp.dataset.mix;
+    var obj = (typeof A[id] === "object" && A[id] && !Array.isArray(A[id])) ? A[id] : {};
+    obj[inp.dataset.k] = inp.value; A[id] = obj;
+    mixSum(id); save();
+  });
+});
+
+/* restore UI from saved answers */
+qids.forEach(function(id){
+  var item = itemOf(id), v = A[id];
+  if (v == null) return;
+  if (item.type === "single" && typeof v === "string") {
+    var hit = false;
+    document.querySelectorAll('.pill[data-q="' + id + '"]').forEach(function(p){
+      if (p.dataset.v === v) { p.classList.add("on"); hit = true; }
+    });
+    if (!hit && v.indexOf("other:") === 0) {
+      var op = document.querySelector('.pill[data-q="' + id + '"][data-other]'); if (op) op.classList.add("on");
+      var oi = document.getElementById("other-" + id);
+      if (oi) { oi.value = v.replace(/^other:\s*/, ""); oi.classList.add("show"); }
+    }
+  } else if (item.type === "multi" && Array.isArray(v)) {
+    document.querySelectorAll('.pill[data-q="' + id + '"]').forEach(function(p){
+      if (v.indexOf(p.dataset.v) >= 0) p.classList.add("on");
+    });
+    var ot = v.filter(function(x){ return x.indexOf("other: ") === 0; })[0], oin = document.getElementById("other-" + id);
+    if (ot && oin) { oin.value = ot.slice(7); oin.classList.add("show"); }
+  } else if (item.type === "text" || item.type === "textarea") {
+    var inp = document.getElementById("in-" + id); if (inp) inp.value = v;
+  } else if (item.type === "mix" && typeof v === "object") {
+    document.querySelectorAll('input[data-mix="' + id + '"]').forEach(function(x){
+      if (v[x.dataset.k] != null) x.value = v[x.dataset.k];
+    });
+    mixSum(id);
+  }
+});
+
+/* ---------------- progress ---------------- */
+function paint(){
+  var done = qids.filter(answered).length;
+  document.getElementById("pbar").style.width = Math.round(done / qids.length * 100) + "%";
+  document.getElementById("pcount").textContent = done + " / " + qids.length + " answered";
+  qids.forEach(function(id){ document.getElementById("q-" + id).classList.toggle("done", answered(id)); });
+  document.querySelectorAll(".cnt[data-band]").forEach(function(c){
+    var ids = qids.filter(function(id){ return id[0] === c.dataset.band; });
+    c.textContent = ids.filter(answered).length + "/" + ids.length;
+  });
+}
+paint();
+
+/* ---------------- sync: autosave every 20 s, flush on pagehide, explicit submit ---------------- */
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 2200);
+}
+function payload(done){
+  return { k: K, done: !!done, answers: A, progress: qids.filter(answered).length + "/" + qids.length };
+}
+function sync(done, cb){
+  fetch("/api/form", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload(done)) })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if (d && d.ok) {
+      var sv = document.getElementById("psave");
+      sv.classList.add("on"); setTimeout(function(){ sv.classList.remove("on"); }, 1800);
+      dirty = false; if (cb) cb(true);
+    } else if (cb) cb(false);
+  })
+  .catch(function(){ if (cb) cb(false); });
+}
+setInterval(function(){ if (dirty && !submitting) sync(false); }, 20000);
+addEventListener("pagehide", function(){
+  if (!dirty) return;
+  try { navigator.sendBeacon("/api/form", new Blob([JSON.stringify(payload(false))], { type: "application/json" })); } catch(e){}
+});
+
+document.getElementById("btn-submit").addEventListener("click", function(){
+  var btn = this;
+  submitting = true; btn.disabled = true; btn.textContent = "Sending …";
+  sync(true, function(ok){
+    submitting = false; btn.disabled = false; btn.textContent = "Submit answers →";
+    if (ok) {
+      document.getElementById("submitcard").style.display = "none";
+      document.getElementById("donecard").classList.add("show");
+      document.getElementById("donecard").scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      toast("Sending failed. Answers are kept locally, please try again later.");
+    }
+  });
+});
+})();
+</script>
+</body></html>
