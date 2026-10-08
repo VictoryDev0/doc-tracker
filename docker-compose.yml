@@ -1,0 +1,27 @@
+# Runs the stdlib-only tracker on the stock Python image (no build step).
+# SQLite DB and uploaded documents live in ./data on the host.
+# Put a TLS-terminating reverse proxy (Traefik, Caddy, nginx) in front for public use.
+services:
+  doc-tracker:
+    image: python:3.12-slim
+    container_name: doc-tracker
+    restart: unless-stopped
+    working_dir: /app
+    command: ["python", "/app/tracker_service.py", "serve"]
+    env_file: .env
+    environment:
+      TRACKER_BIND: "0.0.0.0"              # listen on all interfaces inside the container
+      TRACKER_DB: "/app/data/tracker.db"
+    volumes:
+      - ./tracker_service.py:/app/tracker_service.py:ro
+      - ./examples:/app/examples:ro
+      - ./data:/app/data
+    ports:
+      - "127.0.0.1:8092:8092"              # bind to localhost; expose publicly via the proxy
+    # Example Traefik labels (uncomment and adjust the host):
+    # labels:
+    #   traefik.enable: "true"
+    #   traefik.http.routers.doctracker.rule: "Host(`docs.example.com`)"
+    #   traefik.http.routers.doctracker.entrypoints: "websecure"
+    #   traefik.http.routers.doctracker.tls.certresolver: "letsencrypt"
+    #   traefik.http.services.doctracker.loadbalancer.server.port: "8092"
